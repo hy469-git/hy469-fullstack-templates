@@ -89,7 +89,7 @@ export class SocketsService {
     if (this.isInitialized) { return; }
     if (this.isConnected()) { return; }
 
-    this.socket = io(this.hostUrl, {
+    this.socket = (io as any)(this.hostUrl, {
       path: `/socket.io-client`,
       query: {
         autoConnect: false
