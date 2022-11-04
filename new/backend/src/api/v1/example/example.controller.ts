@@ -11,7 +11,6 @@ export class ExampleController {
      */
     public applyRoutes(): Router {
         const router = Router();
-
         router
             .get('/hello', this.getExample);
 
@@ -23,6 +22,6 @@ export class ExampleController {
      */
     public getExample(req: Request, res: Response) {
         console.info('getExample request print message');
-        res.json({ message: 'hello' });
+        res.json({ message: 'hello there' });
     }
 }
