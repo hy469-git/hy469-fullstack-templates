@@ -21,7 +21,7 @@ class ExampleController {
      */
     getExample(req, res) {
         console.info('getExample request print message');
-        res.json({ message: 'hello' });
+        res.json({ message: 'hello there' });
     }
 }
 exports.ExampleController = ExampleController;

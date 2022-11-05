@@ -17,18 +17,16 @@ const http_1 = __importDefault(require("http"));
 const cors_1 = __importDefault(require("cors"));
 // import morgan from 'morgan';
 const express_1 = __importDefault(require("express"));
-// import mongoose from 'mongoose';
+const mongoose_1 = __importDefault(require("mongoose"));
 const body_parser_1 = __importDefault(require("body-parser"));
 // import methodOverride from 'method-override';
 const http_errors_1 = require("http-errors");
 const http_status_codes_1 = require("http-status-codes");
 const api_1 = require("./api");
 // import { logger } from './utils/logger';
-// import { MongoAdapter } from './database';
-// import { config, getHostDomain } from './config/environment';
+const database_1 = require("./database");
+const environment_1 = require("./config/environment");
 // import { DIContainer, SocketsService, MinioService } from './services';
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
 class App {
     constructor() { }
     /**
@@ -49,10 +47,9 @@ class App {
                 // const minioService = DIContainer.get(MinioService);
                 // await minioService.setup();
                 // Finally start server
-                // server.listen(process.env.port, () => {
-                //     logger.info(`Server started in "${process.env.environment}" mode. Available on: ${getHostDomain()}`);
-                // });
-                server.listen(process.env.port);
+                server.listen(environment_1.config.port, () => {
+                    console.info(`Server started in "${environment_1.config.environment}" mode. Available on: ${(0, environment_1.getHostDomain)()}`);
+                });
             }
             catch (e) {
                 console.error(`Failed to start server due to error: `, e);
@@ -71,8 +68,8 @@ class App {
         return __awaiter(this, void 0, void 0, function* () {
             const application = (0, express_1.default)();
             application
-                .set('port', process.env.port)
-                .set('env', process.env.environment)
+                .set('port', environment_1.config.port)
+                .set('env', environment_1.config.environment)
                 .use((0, cors_1.default)())
                 .use(body_parser_1.default.json({ limit: '5MB' }))
                 .use(body_parser_1.default.urlencoded({ extended: true }));
@@ -96,16 +93,17 @@ class App {
      */
     setupDatabase() {
         return __awaiter(this, void 0, void 0, function* () {
-            // try {
-            //     // connect to database
-            //     await MongoAdapter.connect();
-            //     logger.info(`MongoDB is connected on ${process.env.mongo.uri}`);
-            //     const Str = mongoose.Schema.Types.String as any;
-            //     Str.checkRequired((v: string) => v != null);
-            // } catch (e) {
-            //     logger.error(`MongoDB connection error: `, e);
-            //     throw e;
-            // }
+            try {
+                // connect to database
+                yield database_1.MongoAdapter.connect();
+                console.info(`MongoDB is connected on ${environment_1.config.mongo.uri}`);
+                const Str = mongoose_1.default.Schema.Types.String;
+                Str.checkRequired((v) => v != null);
+            }
+            catch (e) {
+                console.error(`MongoDB connection error: `, e);
+                throw e;
+            }
         });
     }
     /**

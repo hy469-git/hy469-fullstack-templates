@@ -2,18 +2,16 @@ import http from 'http';
 import cors from 'cors';
 // import morgan from 'morgan';
 import express from 'express';
-// import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 // import methodOverride from 'method-override';
 import { MethodNotAllowed } from 'http-errors';
 import { INTERNAL_SERVER_ERROR, UNPROCESSABLE_ENTITY } from 'http-status-codes';
 import { Api } from './api';
 // import { logger } from './utils/logger';
-// import { MongoAdapter } from './database';
-// import { config, getHostDomain } from './config/environment';
+import { MongoAdapter } from './database';
+import { config, getHostDomain } from './config/environment';
 // import { DIContainer, SocketsService, MinioService } from './services';
-import dotenv from 'dotenv';
-dotenv.config();
 
 export class App {
 
@@ -42,11 +40,10 @@ export class App {
             // await minioService.setup();
 
             // Finally start server
-            // server.listen(process.env.port, () => {
-            //     logger.info(`Server started in "${process.env.environment}" mode. Available on: ${getHostDomain()}`);
-            // });
+            server.listen(config.port, () => {
+                console.info(`Server started in "${config.environment}" mode. Available on: ${getHostDomain()}`);
+            });
 
-            server.listen(process.env.port);
         } catch (e) {
             console.error(`Failed to start server due to error: `, e);
             process.exit(-1);
@@ -64,8 +61,8 @@ export class App {
     private async setupExpressApp(): Promise<express.Application> {
         const application = express();
         application
-            .set('port', process.env.port)
-            .set('env', process.env.environment)
+            .set('port', config.port)
+            .set('env', config.environment)
             .use(cors())
             .use(bodyParser.json({ limit: '5MB' }))
             .use(bodyParser.urlencoded({ extended: true }));
@@ -92,17 +89,17 @@ export class App {
      * @private
      */
     private async setupDatabase() {
-        // try {
-        //     // connect to database
-        //     await MongoAdapter.connect();
-        //     logger.info(`MongoDB is connected on ${process.env.mongo.uri}`);
-        //     const Str = mongoose.Schema.Types.String as any;
-        //     Str.checkRequired((v: string) => v != null);
+        try {
+            // connect to database
+            await MongoAdapter.connect();
+            console.info(`MongoDB is connected on ${config.mongo.uri}`);
+            const Str = mongoose.Schema.Types.String as any;
+            Str.checkRequired((v: string) => v != null);
 
-        // } catch (e) {
-        //     logger.error(`MongoDB connection error: `, e);
-        //     throw e;
-        // }
+        } catch (e) {
+            console.error(`MongoDB connection error: `, e);
+            throw e;
+        }
     }
 
     /**
