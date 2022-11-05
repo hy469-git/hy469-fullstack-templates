@@ -6,8 +6,8 @@ services:
     build: ../backend
     container_name: ${APP_NAME}-backend
     restart: always
-    # depends_on:
-    #   - database
+    depends_on:
+      - database
     #   - redis
     #   - minio
     networks:
@@ -29,6 +29,30 @@ services:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
 
+  database:
+    image: mongo:4.2.1-bionic
+    container_name: ${APP_NAME}-database
+    restart: always
+    command:
+      - --auth
+      - --bind_ip_all
+      - --port=${DB_PORT}
+      - --setParameter=enableLocalhostAuthBypass=true
+      - --timeStampFormat=iso8601-utc
+      # - --logpath=/var/log/mongodb/mongod.log
+    networks:
+      - integration-network
+    volumes:
+      - database-volume:/data/db
+      - ./logs/database:/var/log/mongodb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+
 networks:
   integration-network:
     name: ${APP_NAME}-integration-network
+
+volumes:
+  database-volume:
+    name: ${APP_NAME}-database-volume

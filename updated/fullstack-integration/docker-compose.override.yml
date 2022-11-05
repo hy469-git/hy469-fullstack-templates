@@ -35,10 +35,10 @@ services:
   #     # Sync source code
   #     - ../frontend/src/:/frontend/src
 
-  # database:
-  #   ports:
-  #     # Expose DB port at host machine
-  #     - ${DB_PORT}:${DB_PORT}
+  database:
+    ports:
+      # Expose DB port at host machine
+      - ${DB_PORT}:${DB_PORT}
 
   # redis:
   #   ports:

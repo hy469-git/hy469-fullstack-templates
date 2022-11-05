@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { ExampleController } from './example/example.controller';
-
+import { TaskController } from './task/task.controller';
+import { TasksService } from '../../services/tasks.service';
 const apiV1Router = express.Router();
 
 
@@ -9,6 +10,10 @@ apiV1Router
   .use(
     '/example',
     new ExampleController().applyRoutes()
+  )
+  .use(
+    '/tasks',
+    new TaskController().applyRoutes()
   );
 
 

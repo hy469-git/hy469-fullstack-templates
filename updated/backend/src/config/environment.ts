@@ -1,18 +1,17 @@
 export const config = {
 
   // application environment mode
-  environment: process.env.ENVIRONMENT,
+  environment: process.env.ENVIRONMENT || "dev",
 
   // host domain options
   protocol: process.env.PROTOCOL || 'http',
   host: process.env.HOST || 'localhost',
   exposedPort: process.env.EXPOSED_PORT || 80,
-  port: 80, // !Do NOT change this option, because it is used by reverse-proxy
+  port: 8080, // !Do NOT change this option, because it is used by reverse-proxy
 
   // MongoDB connection options
   mongo: {
-    // uri: `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/?authSource=admin`,
-    uri: `mongodb://localhost:27017/?authSource=admin`,
+    uri: `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/?authSource=admin` || "mongodb://localhost:27017/?authSource=admin",
     options: {
       dbName: process.env.DB_NAME,
       user: process.env.DB_ROOT_USERNAME,

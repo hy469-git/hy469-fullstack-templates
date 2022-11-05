@@ -6,13 +6,12 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 // import methodOverride from 'method-override';
 import { MethodNotAllowed } from 'http-errors';
-import { INTERNAL_SERVER_ERROR, UNPROCESSABLE_ENTITY } from 'http-status-codes';
+import { StatusCodes } from 'http-status-codes';
 import { Api } from './api';
 // import { logger } from './utils/logger';
 import { MongoAdapter } from './database';
 import { config, getHostDomain } from './config/environment';
-// import { DIContainer, SocketsService, MinioService } from './services';
-
+import { DIContainer, SocketsService } from './services';
 export class App {
 
     private app!: express.Application;
@@ -31,13 +30,9 @@ export class App {
             this.app = await this.setupExpressApp();
             const server = http.createServer(this.app);
 
-            // // Start socket server
-            // const socketService = DIContainer.get(SocketsService);
-            // await socketService.start(server);
-
-            // // Setup minio client
-            // const minioService = DIContainer.get(MinioService);
-            // await minioService.setup();
+            // Start socket server
+            const socketService = DIContainer.get(SocketsService);
+            await socketService.start(server);
 
             // Finally start server
             server.listen(config.port, () => {
@@ -112,7 +107,7 @@ export class App {
      * @param {express.NextFunction} next
      */
     private handlerError(error: any, req: express.Request, res: express.Response, next: express.NextFunction) {
-        let status = error.status || INTERNAL_SERVER_ERROR;
+        let status = error.status || StatusCodes.INTERNAL_SERVER_ERROR;
         const code = error.code || error.name || 'InternalServerError';
         const message = error.message || 'Internal Server Error';
         const errors = error.errors || undefined;
