@@ -15,6 +15,7 @@ services:
     environment:
       - ENVIRONMENT=development
       - EXPOSED_PORT=${DEV_BACKEND_PORT}
+      - PORT=${DEV_BACKEND_PORT}
     ports:
       # Expose backend port at host machine
       - ${DEV_BACKEND_PORT}:8080

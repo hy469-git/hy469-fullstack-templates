@@ -71,7 +71,6 @@ export class ResourceController<T extends Document> implements ICrudController {
    * Get all resources paginated
    */
   public getAll() {
-    console.log('getAll');
     return async (req: Request, res: Response, next?: NextFunction): Promise<Response | undefined> => {
       try {
         const queryOptions = this.parseQueryParameters(req);
@@ -101,7 +100,6 @@ export class ResourceController<T extends Document> implements ICrudController {
       try {
         const resource = await new this.modelSchema(req.body)
           .save();
-        console.log(req.body);
         return res
           .status(StatusCodes.CREATED)
           .json(resource);
