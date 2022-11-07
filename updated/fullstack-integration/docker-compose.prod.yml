@@ -17,10 +17,10 @@ services:
       - HOST=${PROD_HOST}
       - EXPOSED_PORT=${PROD_PORT}
 
-  # frontend:
-  #   build:
-  #     args:
-  #       - API_HOST=${PROD_PROTOCOL}://${PROD_HOST}:${PROD_PORT}
+  frontend:
+    build:
+      args:
+        - API_HOST=${PROD_PROTOCOL}://${PROD_HOST}:${PROD_PORT}
 
   # reverse-proxy:
   #   ports:

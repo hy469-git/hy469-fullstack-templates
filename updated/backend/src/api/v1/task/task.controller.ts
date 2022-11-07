@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, Router } from 'express';
 // import { DIContainer, MinioService, SocketsService } from '@app/services';
 // import { logger } from '../../../utils/logger';
-import { ITask, TaskModel } from '../../../models';
+import { ITask, TaskModel } from './task.model';
 import { TasksService } from './tasks.service';
 import { ResourceController } from '../../shared';
 
@@ -31,7 +31,7 @@ export class TaskController {
      * @param req
      * @param res 
      */
-    public getTasks(req: Request, res: Response) {
+    public async getTasks(req: Request, res: Response) {
         const tasksService = new TasksService();
         console.info('getTasks request');
         const allTasks = tasksService.getAll()(req, res);
@@ -44,7 +44,7 @@ export class TaskController {
      */
     public postTask(req: Request, res: Response) {
         const tasksService = new TasksService();
-        console.info('postTask request');
+        console.info('create request');
         const task = tasksService.create()(req, res);
     }
 

@@ -8,8 +8,6 @@ services:
     restart: always
     depends_on:
       - database
-    #   - redis
-    #   - minio
     networks:
       - integration-network
     volumes:
@@ -29,6 +27,15 @@ services:
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
 
+  frontend:
+    image: ${APP_NAME}-frontend:${APP_VERSION}
+    build:
+      context: ../frontend
+    container_name: ${APP_NAME}-frontend
+    restart: always
+    networks:
+      - integration-network
+
   database:
     image: mongo:4.2.1-bionic
     container_name: ${APP_NAME}-database
@@ -39,7 +46,6 @@ services:
       - --port=${DB_PORT}
       - --setParameter=enableLocalhostAuthBypass=true
       - --timeStampFormat=iso8601-utc
-      # - --logpath=/var/log/mongodb/mongod.log
     networks:
       - integration-network
     volumes:

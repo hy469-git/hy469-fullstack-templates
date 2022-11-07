@@ -1,7 +1,6 @@
 import * as express from 'express';
 import { ExampleController } from './example/example.controller';
 import { TaskController } from './task/task.controller';
-import { TasksService } from './task/tasks.service';
 const apiV1Router = express.Router();
 
 
