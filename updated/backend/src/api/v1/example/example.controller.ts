@@ -21,7 +21,7 @@ export class ExampleController {
      * Sens a example message back as a response
      */
     public getExample(req: Request, res: Response) {
-        console.info('getExample request print message');
-        res.json({ message: 'hello there' });
+        console.info('getExample request');
+        res.json({ message: 'hello there!' });
     }
 }

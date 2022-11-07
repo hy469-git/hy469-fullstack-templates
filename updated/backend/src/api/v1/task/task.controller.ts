@@ -6,6 +6,7 @@ import { TasksService } from '../../../services/tasks.service';
 import { ResourceController } from '../../shared';
 
 export class TaskController {
+    private tasksService: TasksService = new TasksService();
     constructor() {
     }
     /**
@@ -16,26 +17,68 @@ export class TaskController {
     public applyRoutes(): Router {
         const router = Router();
         router
-            .get('/all', this.getTasks);
-        // .post('/create', this.postTask);
+            .get('/', this.getTasks)
+            .get('/:id', this.getTaskById)
+            .post('/', this.postTask)
+            .put('/:id', this.updateTask)
+            .delete('/:id', this.deleteTask);
 
         return router;
     }
 
     /**
-     * Sends a example message containing all tasks back as a response
+     * Sends a message containing all tasks back as a response
+     * @param req
+     * @param res 
      */
     public getTasks(req: Request, res: Response) {
-        // const tasksService = new TasksService();
-        console.info('getTasks request print message');
-        const allTasks = new TasksService().getAll()(req, res);
-        res.json(allTasks);
+        const tasksService = new TasksService();
+        console.info('getTasks request');
+        const allTasks = tasksService.getAll()(req, res);
     }
 
+    /**
+     * Creates a new task
+     * @param req
+     * @param res
+     */
     public postTask(req: Request, res: Response) {
         const tasksService = new TasksService();
-        console.info('postTask request print message');
+        console.info('postTask request');
         const task = tasksService.create()(req, res);
-        res.json(task);
+    }
+
+    /**
+     * Delete task by id
+     * @param req 
+     * @param res 
+     */
+    public deleteTask(req: Request, res: Response) {
+        const tasksService = new TasksService();
+        console.info('deleteTask request');
+        const task = tasksService.delete(req.params.id)(req, res);
+    }
+
+
+    /**
+     * Update task by id
+     * @param req 
+     * @param res 
+     */
+    public updateTask(req: Request, res: Response) {
+        const tasksService = new TasksService();
+        console.info('updateTask request');
+        const task = tasksService.update(req.params.id, req.body.blacklist)(req, res);
+    }
+
+    /**
+     * Get single task by id
+     * @param req 
+     * @param res 
+     */
+    public getTaskById(req: Request, res: Response) {
+        const tasksService = new TasksService();
+        console.info('getTaskById request');
+        const task = tasksService.getOne(req.params.id)(req, res);
     }
 }

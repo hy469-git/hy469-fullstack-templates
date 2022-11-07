@@ -1,7 +1,7 @@
 # -------------- STAGE 1: Build --------------
 
 FROM node:18.12.0-alpine3.16
-LABEL maintainer="Nikos Anifantis"
+LABEL maintainer="Konstantinos Volakakis"
 
 # set working directory
 WORKDIR /backend
@@ -23,7 +23,7 @@ COPY . /backend
 # -------------- STAGE 1: Build --------------
 
 FROM node:18.12.0-alpine
-LABEL maintainer="Nikos Anifantis"
+LABEL maintainer="Konstantinos Volakakis"
 
 # set working directory
 WORKDIR /backend
