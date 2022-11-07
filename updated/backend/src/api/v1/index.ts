@@ -13,7 +13,7 @@ apiV1Router
   .use(
     '/tasks',
     new TaskController().applyRoutes()
-  );
+  )
 
 
 export { apiV1Router };

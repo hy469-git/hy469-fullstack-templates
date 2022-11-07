@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TaskModel } from 'src/app/global/models/tasks/task.model';
+import { SocketsService } from 'src/app/global/services/sockets/sockets.service';
 import { TasksService } from 'src/app/global/services/tasks/tasks.service';
 
 @Component({
@@ -11,10 +12,15 @@ export class TasksViewComponent implements OnInit {
   public tasks: TaskModel[] = [];
   public title: string = '';
   public description: string = '';
-  constructor(private tasksService: TasksService) { }
+  constructor(private tasksService: TasksService, private socketService: SocketsService) { }
 
   ngOnInit(): void {
     this.getAllTasks()
+
+    // Susbcribe to socket event and set callback
+    this.socketService.subscribe("tasks_update", (data: any) => {
+      this.getAllTasks();
+    });
   }
 
   private getAllTasks(): void {
@@ -24,6 +30,9 @@ export class TasksViewComponent implements OnInit {
   }
 
   public postTask(): void {
+    // Emit event for update tasks
+    this.socketService.publish("tasks_update", {});
+
     const task = new TaskModel({ title: this.title, description: this.description });
     this.tasksService.create(task).subscribe((result) => {
       this.tasks.push(result);
@@ -38,9 +47,8 @@ export class TasksViewComponent implements OnInit {
     if (response) {
       this.tasksService.delete(task._id).subscribe(() => {
         this.getAllTasks();
+        this.socketService.publish("tasks_update", {});
       });
     }
   }
-
-
 }

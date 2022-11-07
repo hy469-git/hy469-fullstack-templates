@@ -11,9 +11,6 @@ export class TasksComponent implements OnInit {
   constructor(private socketsService: SocketsService) { }
 
   ngOnInit(): void {
-    this.socketsService.receiveWelcome().subscribe((result) => {
-      console.log("Message received", result);
-    })
   }
 
 }

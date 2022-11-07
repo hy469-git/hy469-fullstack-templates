@@ -24,15 +24,12 @@ export class SocketsService {
     await this.socketServer.start(server);
   }
 
-  /**
-   * Broadcast event to all
-   *
-   * @param {string} event
-   * @param {*} message
-   * @returns
-   */
-  public broadcast(event: string, message: any) {
-    this.socketServer.io.emit('server:event', event, message);
+  public publish(event: string, data: any) {
+    /** 
+     * "server:event" is predefined channel for every server event.
+     * Every socket-client in the frontend has subscribed in this event and
+    */
+    this.socketServer.io.emit(event, data);
   }
 
 }

@@ -38,9 +38,11 @@ export class SocketServer {
       this.io.on("connection", (socket) => {
         console.log("New PDA has connected");
         //emit welcome message from server to user
+        //TODO: remove later
         socket.emit("welcome", {
           message: "connection was successful",
         });
+        socket.emit("")
       });
       // implement socket initialization with path provided by config
 
@@ -121,9 +123,9 @@ export class SocketServer {
   private onClientEvent(socket: io.Socket): void {
     socket.on('client:event', (data: any) => {
       console.debug('client event');
+      this.io.emit(data.event, data.data);
     });
   }
-
   //#endregion Private methods
   // --------------------------------
 
