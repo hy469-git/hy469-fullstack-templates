@@ -34,7 +34,14 @@ export class SocketServer {
       // });
 
       // create socket io server
-      this.io = new io.Server(server, { path: config.sockets.path });
+      this.io = new io.Server(server, { path: "", cors: { origin: "*" } });
+      this.io.on("connection", (socket) => {
+        console.log("New PDA has connected");
+        //emit welcome message from server to user
+        socket.emit("welcome", {
+          message: "connection was successful",
+        });
+      });
       // implement socket initialization with path provided by config
 
       // attach redis adapter

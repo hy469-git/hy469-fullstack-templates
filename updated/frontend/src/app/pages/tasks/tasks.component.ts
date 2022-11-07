@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SocketsService } from 'src/app/global/services/sockets/sockets.service';
 
 @Component({
   selector: 'app-tasks',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TasksComponent implements OnInit {
 
-  constructor() { }
+  constructor(private socketsService: SocketsService) { }
 
   ngOnInit(): void {
+    this.socketsService.receiveWelcome().subscribe((result) => {
+      console.log("Message received", result);
+    })
   }
 
 }
