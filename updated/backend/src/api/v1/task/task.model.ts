@@ -1,5 +1,5 @@
 import { Document, Schema, Model, model } from 'mongoose';
-import { DefaultSchemaOptions } from '../shared';
+import { DefaultSchemaOptions } from '../../../models/shared';
 
 
 // ------------------------------------------

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction, Router } from 'express';
 // import { DIContainer, MinioService, SocketsService } from '@app/services';
 // import { logger } from '../../../utils/logger';
 import { ITask, TaskModel } from '../../../models';
-import { TasksService } from '../../../services/tasks.service';
+import { TasksService } from './tasks.service';
 import { ResourceController } from '../../shared';
 
 export class TaskController {

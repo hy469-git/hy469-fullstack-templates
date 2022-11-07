@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { injectable } from 'inversify';
-import { ResourceController } from '../api/shared';
-import { ITask, TaskModel } from '../models';
+import { ResourceController } from '../../shared';
+import { ITask, TaskModel } from '../../../models';
 
 
 @injectable()
