@@ -36,7 +36,7 @@ export class TasksViewComponent implements OnInit {
       this.tasks.push(result);
       this.title = '';
       this.description = '';
-      this.socketService.publish("tasks_update", {});
+      this.socketService.publish("tasks_update", task);
     });
   }
 

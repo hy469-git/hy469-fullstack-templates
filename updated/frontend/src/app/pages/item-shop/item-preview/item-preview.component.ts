@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ItemModel } from 'src/app/global/models/tasks/item.model';
+import { ItemModel } from 'src/app/global/models/items/item.model';
 
 
 @Component({
@@ -16,10 +16,10 @@ export class ItemPreviewComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-  
+
   }
 
-  public onClick(){
+  public onClick() {
     this.clickEmitter.emit(this.self);
   }
 }

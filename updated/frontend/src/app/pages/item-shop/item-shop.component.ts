@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ItemModel } from 'src/app/global/models/tasks/item.model';
+import { ItemModel } from 'src/app/global/models/items/item.model';
 import { ItemsService } from 'src/app/global/services/item-shop/item-shop.service';
 
 
@@ -23,20 +23,20 @@ export class ItemShopComponent implements OnInit {
 
   constructor(private itemsService: ItemsService) { }
 
-  async ngOnInit(){
+  async ngOnInit() {
     this.itemsService.getAll().subscribe((result) => {
       console.log(result);
       this.items = result;
-      if(this.items.length > 0)
+      if (this.items.length > 0)
         this.selectedItem = this.items[0];
     });
 
   }
 
-  public onItemClick(item: ItemModel){
-    this.items.forEach(item => {item.selected = false});
+  public onItemClick(item: ItemModel) {
+    this.items.forEach(item => { item.selected = false });
 
-    this.selectedItem = item; 
+    this.selectedItem = item;
     item.selected = true;
   }
 }

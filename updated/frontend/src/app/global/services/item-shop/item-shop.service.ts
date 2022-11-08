@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ItemModel } from '../../models/tasks/item.model';
+import { ItemModel } from '../../models/items/item.model';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
@@ -33,11 +33,11 @@ export class ItemsService {
 
 
   // Debug function for deleting all items
-  private deleteAll(){
+  private deleteAll() {
     this.getAll().subscribe((data: ItemModel[]) => {
       console.log(data);
       data.forEach((item: ItemModel) => {
-        this.delete((item as any)._id).subscribe((data: any) => {});
+        this.delete((item as any)._id).subscribe((data: any) => { });
       });
     });
   }

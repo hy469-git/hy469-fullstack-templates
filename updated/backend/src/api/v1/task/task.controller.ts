@@ -10,7 +10,7 @@ export class TaskController extends ResourceController<ITask>{
         super(TaskModel);
     }
     /**
-     * Apply all routes for example
+     * Apply all routes for tasks
      *
      * @returns {Router}
      */
