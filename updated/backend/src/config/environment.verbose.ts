@@ -15,8 +15,6 @@ export const config = {
     uri: "mongodb://localhost:27017/?authSource=admin",
     options: {
       dbName: "ami-fullstack-database",
-      //   user: "ami-fullstack-admin",
-      //   pass: "i7iPL2ABWzC0J3euvEaKATnU8D9DKZCg",
     }
   },
 

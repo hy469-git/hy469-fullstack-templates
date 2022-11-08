@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  host: 'API_HOST_REPLACE',
+  host: 'http://localhost:8080', // change "localhost" to your IP address
 };

@@ -26,8 +26,8 @@ services:
       - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
-      - HOST=${localhost} # change this to your host ip
-
+      
+      - HOST=${HOST} 
   frontend:
     image: ${APP_NAME}-frontend:${APP_VERSION}
     build:

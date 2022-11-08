@@ -40,13 +40,3 @@ services:
     ports:
       # Expose DB port at host machine
       - ${DB_PORT}:${DB_PORT}
-
-  # redis:
-  #   ports:
-  #     # Expose redis port at host machine
-  #     - ${REDIS_PORT}:${REDIS_PORT}
-
-  # minio:
-  #   ports:
-  #     # Expose minio port at host machine
-  #     - ${MINIO_PORT}:${MINIO_PORT}

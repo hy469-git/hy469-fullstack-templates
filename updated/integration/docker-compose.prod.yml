@@ -21,11 +21,3 @@ services:
     build:
       args:
         - API_HOST=${PROD_PROTOCOL}://${PROD_HOST}:${PROD_PORT}
-
-  # reverse-proxy:
-  #   ports:
-  #     - ${PROD_PORT}:80
-  #   volumes: 
-  #     - ./config/reverse-proxy/conf.d:/etc/nginx/conf.d
-  #     - ./config/reverse-proxy/nginx.conf:/etc/nginx/nginx.conf
-      
