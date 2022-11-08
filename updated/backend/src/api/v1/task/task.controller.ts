@@ -2,13 +2,12 @@ import { Request, Response, NextFunction, Router } from 'express';
 // import { DIContainer, MinioService, SocketsService } from '@app/services';
 // import { logger } from '../../../utils/logger';
 import { ITask, TaskModel } from './task.model';
-import { TasksService } from './tasks.service';
 import { ResourceController } from '../../shared';
 import { StatusCodes } from 'http-status-codes';
+export class TaskController extends ResourceController<ITask>{
 
-export class TaskController {
-    private tasksService: TasksService = new TasksService();
     constructor() {
+        super(TaskModel);
     }
     /**
      * Apply all routes for example
@@ -32,10 +31,9 @@ export class TaskController {
      * @param req
      * @param res 
      */
-    public async getTasks(req: Request, res: Response) {
-        const tasksService = new TasksService();
+    getTasks = async (req: Request, res: Response) => {
         console.info('getTasks request');
-        const allTasks = await tasksService.getAll(req, res);
+        const allTasks = await this.getAll(req, res);
         // you can process the data retrieved here before returning it to the client
         return res
             .status(StatusCodes.OK)
@@ -47,13 +45,13 @@ export class TaskController {
      * @param req
      * @param res
      */
-    public async postTask(req: Request, res: Response) {
-        const tasksService = new TasksService();
-        console.info('create request');
-        const task = await tasksService.create(req, res);
+
+    postTask = async (req: Request, res: Response) => {
+        console.info('postTask request');
+        const task = await this.create(req, res);
         // you can process the data retrieved here before returning it to the client
         return res
-            .status(StatusCodes.CREATED)
+            .status(StatusCodes.OK)
             .json(task);
     }
 
@@ -62,25 +60,25 @@ export class TaskController {
      * @param req 
      * @param res 
      */
-    public async deleteTask(req: Request, res: Response) {
-        const tasksService = new TasksService();
+    deleteTask = async (req: Request, res: Response) => {
         console.info('deleteTask request');
-        const task = await tasksService.delete(req.params.id, req, res);
+        const task = await this.delete(req.params.id, req, res);
+        // you can process the data retrieved here before returning it to the client
         return res
             .status(StatusCodes.OK)
             .json(task);
-    }
 
+    }
 
     /**
      * Update task by id
      * @param req 
      * @param res 
      */
-    public async updateTask(req: Request, res: Response) {
-        const tasksService = new TasksService();
+    updateTask = async (req: Request, res: Response) => {
         console.info('updateTask request');
-        const task = await tasksService.update(req.params.id, req.body.blacklist, req, res);
+        const task = await this.update(req.params.id, req.body.blacklist, req, res);
+        // you can process the data retrieved here before returning it to the client
         return res
             .status(StatusCodes.OK)
             .json(task);
@@ -91,10 +89,11 @@ export class TaskController {
      * @param req 
      * @param res 
      */
-    public async getTaskById(req: Request, res: Response) {
-        const tasksService = new TasksService();
+    getTaskById = async (req: Request, res: Response) => {
         console.info('getTaskById request');
-        const task = await tasksService.getOne(req.params.id, req, res);
+        const task = await this.getOne(req.params.id, req, res);
+
+        // you can process the data retrieved here before returning it to the client
         return res
             .status(StatusCodes.OK)
             .json(task);

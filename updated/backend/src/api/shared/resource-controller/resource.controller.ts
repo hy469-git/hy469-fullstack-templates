@@ -116,13 +116,12 @@ export class ResourceController<T extends Document> {
     try {
       const modelId: any = id || req.params.id;
 
-      await this.modelSchema
+      const resource = await this.modelSchema
         .findOneAndDelete({ _id: modelId })
         .orFail(new NotFound())
         .exec();
 
-      return res
-        .sendStatus(StatusCodes.NO_CONTENT);
+      return resource;
 
     } catch (e) {
       next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
