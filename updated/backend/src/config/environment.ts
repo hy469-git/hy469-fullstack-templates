@@ -20,11 +20,6 @@ export const config = {
       pass: process.env.DB_ROOT_PASSWORD,
     }
   },
-
-  // sockets options
-  sockets: {
-    path: '/socket.io-client'
-  }
 };
 
 
@@ -50,7 +45,7 @@ export function isDev(): boolean {
 
 /**
  * Get full host domain
- * e.g. http://localhost:80
+ * e.g. http://localhost:8080
  *
  * @export
  * @returns {string}

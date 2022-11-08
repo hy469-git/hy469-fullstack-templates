@@ -20,20 +20,11 @@ export class SocketServer {
     try {
       // create socket io server
       this.io = new io.Server(server, { path: "", cors: { origin: "*" } });
-      this.io.on("connection", (socket) => {
-        console.log("New client has connected");
-        //emit welcome message from server to user
-        //TODO: remove later
-        socket.emit("welcome", {
-          message: "connection was successful",
-        });
-        socket.emit("")
-      });
 
       // register events on connect
       this.onConnect();
 
-      console.info(`Sockets are established on path: ${getHostDomain()}${config.sockets.path}`);
+      console.info(`Sockets are established on path: ${getHostDomain()}`);
 
     } catch (e) {
       console.error('Socket server failed to start', e);
@@ -48,7 +39,12 @@ export class SocketServer {
   private onConnect() {
     this.io.on('connection', socket => {
       console.debug('connection');
-
+      console.log("New client has connected");
+      //emit welcome message from server to user
+      // handshake verify function
+      socket.emit("welcome", {
+        message: "connection was successful",
+      });
       this.onSubscribe(socket);
       this.onUnsubscribe(socket);
       this.onDisconnecting(socket);

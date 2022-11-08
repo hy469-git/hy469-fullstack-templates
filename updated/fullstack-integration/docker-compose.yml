@@ -26,6 +26,7 @@ services:
       - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - HOST=${localhost} # change this to your host ip
 
   frontend:
     image: ${APP_NAME}-frontend:${APP_VERSION}
@@ -54,6 +55,7 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${DB_ROOT_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - HOST=${localhost}
 
 networks:
   integration-network:
