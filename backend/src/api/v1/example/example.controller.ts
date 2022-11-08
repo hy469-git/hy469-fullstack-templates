@@ -1,6 +1,4 @@
 import { Request, Response, NextFunction, Router } from 'express';
-// import { DIContainer, MinioService, SocketsService } from '@app/services';
-// import { logger } from '../../../utils/logger';
 
 export class ExampleController {
 

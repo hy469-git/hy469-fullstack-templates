@@ -135,7 +135,7 @@ export class ItemShopController extends ResourceController<IItem>{
                 selected: false
             }
         ]
-        
+
         await ItemModel.insertMany(items)
             .then(function (docs) {
                 console.log("Nice ", docs);

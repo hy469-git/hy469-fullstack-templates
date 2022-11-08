@@ -1,6 +1,4 @@
 import { Request, Response, NextFunction, Router } from 'express';
-// import { DIContainer, MinioService, SocketsService } from '@app/services';
-// import { logger } from '../../../utils/logger';
 import { ITask, TaskModel } from './task.model';
 import { ResourceController } from '../../shared';
 import { StatusCodes } from 'http-status-codes';
