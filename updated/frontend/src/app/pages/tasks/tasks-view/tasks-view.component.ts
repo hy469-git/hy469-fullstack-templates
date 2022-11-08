@@ -12,10 +12,13 @@ export class TasksViewComponent implements OnInit {
   public tasks: TaskModel[] = [];
   public title: string = '';
   public description: string = '';
-  constructor(private tasksService: TasksService, private socketService: SocketsService) { }
+  constructor(
+    private tasksService: TasksService,
+    private socketService: SocketsService
+  ) { }
 
   ngOnInit(): void {
-    this.getAllTasks()
+    this.getAllTasks();
 
     // Susbcribe to socket event and set callback
     this.socketService.subscribe("tasks_update", (data: any) => {
@@ -31,9 +34,14 @@ export class TasksViewComponent implements OnInit {
 
   public postTask(): void {
     // Emit event for update tasks
-    const task = new TaskModel({ title: this.title, description: this.description });
+
+    // this--> const task = new TaskModel({ title: this.title, description: this.description });
+    const task = new TaskModel();
+    // or that -->
+    task.title = this.title;
+    task.description = this.description;
+
     this.tasksService.create(task).subscribe((result) => {
-      this.tasks.push(result);
       this.title = '';
       this.description = '';
       this.socketService.publish("tasks_update", task);
@@ -42,7 +50,6 @@ export class TasksViewComponent implements OnInit {
 
   public deleteTask(task: TaskModel): void {
     const response = confirm("Are you sure you want to delete this task?");
-
     if (response) {
       this.tasksService.delete(task._id).subscribe(() => {
         this.getAllTasks();
