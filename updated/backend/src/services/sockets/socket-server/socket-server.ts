@@ -18,25 +18,10 @@ export class SocketServer {
    */
   public async start(server: http.Server) {
     try {
-      /**
-       * 
-       * "redis adapter is based on pub/sub mecanism and should not 
-       *  be scaled using redis cluster and is (as such) useless as 
-       *  soon as message rate exceed ~100k/s"
-       * 
-       */
-
-      // // create redis adapter for sockets.io
-      // const redisAdapter = RedisAdapter({
-      //   host: config.redis.host,
-      //   port: Number(config.redis.port),
-      //   auth_pass: config.redis.password
-      // });
-
       // create socket io server
       this.io = new io.Server(server, { path: "", cors: { origin: "*" } });
       this.io.on("connection", (socket) => {
-        console.log("New PDA has connected");
+        console.log("New client has connected");
         //emit welcome message from server to user
         //TODO: remove later
         socket.emit("welcome", {
@@ -44,17 +29,6 @@ export class SocketServer {
         });
         socket.emit("")
       });
-      // implement socket initialization with path provided by config
-
-      // attach redis adapter
-      // this.io.adapter(redisAdapter);
-
-      // // log adapter errors
-      // this.io
-      //   .of('/').adapter
-      //   .on('error', (e: Error) => {
-      //     console.error('Socket server failed due to: ', e);
-      //   });
 
       // register events on connect
       this.onConnect();

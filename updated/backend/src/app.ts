@@ -112,11 +112,11 @@ export class App {
         const message = error.message || 'Internal Server Error';
         const errors = error.errors || undefined;
 
-        // // cast mongoose errors to bad request
-        // if (error instanceof mongoose.Error.CastError
-        //     || error instanceof mongoose.Error.ValidationError) {
-        //     status = UNPROCESSABLE_ENTITY;
-        // }
+        // cast mongoose errors to bad request
+        if (error instanceof mongoose.Error.CastError
+            || error instanceof mongoose.Error.ValidationError) {
+            status = StatusCodes.UNPROCESSABLE_ENTITY;
+        }
 
         res.status(status).json({ status, code, message, errors });
     }

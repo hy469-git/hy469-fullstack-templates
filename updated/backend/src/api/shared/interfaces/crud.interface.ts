@@ -62,20 +62,3 @@ export interface IPaginateOptions {
   page?: number;
   limit?: number;
 }
-
-
-/**
- * Controller for implementing basic model methods
- * such as Create, Read, Update and Delete (CRUD)
- *
- * @export
- * @interface ICrudController
- */
-export interface ICrudController {
-  applyRoutes(options?: ICrudRouteOptions[]): Router;
-  getAll(): (req: Request, res: Response, next?: NextFunction) => Promise<Response | undefined>;
-  create(): (req: Request, res: Response, next?: NextFunction) => Promise<Response | undefined>;
-  getOne(id?: string): (req: Request, res: Response, next?: NextFunction) => Promise<Response | undefined>;
-  update(id?: string, blacklist?: string[]): (req: Request, res: Response, next?: NextFunction) => Promise<Response | undefined>;
-  delete(id?: string): (req: Request, res: Response, next?: NextFunction) => Promise<Response | undefined>;
-}

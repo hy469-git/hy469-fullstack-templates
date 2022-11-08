@@ -3,9 +3,9 @@ import { Request, Response, Router, NextFunction } from 'express';
 import { MongooseQueryParser, QueryOptions } from 'mongoose-query-parser';
 import { Model, Document } from 'mongoose';
 import { StatusCodes } from 'http-status-codes';
-import { ICrudController, ICrudRouteOptions, CrudOperations, IPaginateOptions } from '../interfaces/crud.interface';
+import { ICrudRouteOptions, CrudOperations, IPaginateOptions } from '../interfaces/crud.interface';
 
-export class ResourceController<T extends Document> implements ICrudController {
+export class ResourceController<T extends Document> {
 
   protected modelSchema: Model<T>;
 
@@ -13,101 +13,42 @@ export class ResourceController<T extends Document> implements ICrudController {
     this.modelSchema = modelSchema;
   }
 
-  /**
-   * Apply routes of CRUD operations
-   * If no options available then it will apply all CRUD operations
-   *
-   * @param {ICrudRouteOptions[]} [options=[]]
-   * @returns {Router}
-   */
-  public applyRoutes(options: ICrudRouteOptions[] = []): Router {
-    const router = Router();
-
-    // apply all routes if not provided
-    if (options.length === 0) {
-      options = [
-        { operation: CrudOperations.GetAll },
-        { operation: CrudOperations.Create },
-        { operation: CrudOperations.GetOne },
-        { operation: CrudOperations.Update },
-        { operation: CrudOperations.Delete }
-      ];
-    }
-
-    // apply routes depending on options
-    options.forEach(o => {
-      const middleware = o.middleware || [];
-
-      switch (o.operation) {
-        case CrudOperations.GetAll:
-          router.get('/', middleware, this.getAll());
-          break;
-
-        case CrudOperations.Create:
-          router.post('/', middleware, this.create());
-          break;
-
-        case CrudOperations.GetOne:
-          router.get('/:id', middleware, this.getOne());
-          break;
-
-        case CrudOperations.Update:
-          router.put('/:id', middleware, this.update());
-          router.patch('/:id', middleware, this.update());
-          break;
-
-        case CrudOperations.Delete:
-          router.delete('/:id', middleware, this.delete());
-          break;
-      }
-    });
-
-    return router;
-  }
-
   // #region CRUD methods
 
   /**
    * Get all resources paginated
    */
-  public getAll() {
-    return async (req: Request, res: Response, next?: NextFunction): Promise<Response | undefined> => {
-      try {
-        const queryOptions = this.parseQueryParameters(req);
-        let resources: T[];
-        // get resources as list
-        resources = await this.modelSchema
-          .find(queryOptions.query)
-          .select(queryOptions.options.select)
-          .populate(queryOptions.options.populate as any)
-          .exec();
+  public async getAll(req: Request, res: Response, next?: NextFunction): Promise<any> {
+    try {
+      const queryOptions = this.parseQueryParameters(req);
+      let resources: T[];
+      // get resources as list
+      resources = await this.modelSchema
+        .find(queryOptions.query)
+        .select(queryOptions.options.select)
+        .populate(queryOptions.options.populate as any)
+        .exec();
+      return resources;
+      // return res
+      //   .status(StatusCodes.OK)
+      //   .json(resources);
 
-        return res
-          .status(StatusCodes.OK)
-          .json(resources);
-
-      } catch (e) {
-        next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
-      }
-    };
+    } catch (e) {
+      next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
+    }
   }
 
   /**
    * Create a new resource model
    */
-  public create() {
-    return async (req: Request, res: Response, next?: NextFunction): Promise<Response | undefined> => {
-      try {
-        const resource = await new this.modelSchema(req.body)
-          .save();
-        return res
-          .status(StatusCodes.CREATED)
-          .json(resource);
-
-      } catch (e) {
-        next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
-      }
-    };
+  public async create(req: Request, res: Response, next?: NextFunction): Promise<any | undefined> {
+    try {
+      const resource = await new this.modelSchema(req.body)
+        .save();
+      return resource;
+    } catch (e) {
+      next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
+    }
   }
 
   /**
@@ -116,27 +57,21 @@ export class ResourceController<T extends Document> implements ICrudController {
    * @param {string} [id] Model id to be retrieved
    * @returns
    */
-  public getOne(id?: string) {
-    return async (req: Request, res: Response, next?: NextFunction): Promise<Response | undefined> => {
-      try {
-        const modelId: any = id || req.params.id;
-        const queryOptions = this.parseQueryParameters(req);
+  public async getOne(id: string, req: Request, res: Response, next?: NextFunction): Promise<any | undefined> {
+    try {
+      const modelId: any = id || req.params.id;
+      const queryOptions = this.parseQueryParameters(req);
 
-        const resource = await this.modelSchema
-          .findOne({ _id: modelId })
-          .select(queryOptions.options.select)
-          .populate(queryOptions.options.populate as any)
-          .orFail(new NotFound())
-          .exec();
-
-        return res
-          .status(StatusCodes.OK)
-          .json(resource);
-
-      } catch (e) {
-        next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
-      }
-    };
+      const resource = await this.modelSchema
+        .findOne({ _id: modelId })
+        .select(queryOptions.options.select)
+        .populate(queryOptions.options.populate as any)
+        .orFail(new NotFound())
+        .exec();
+      return resource;
+    } catch (e) {
+      next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
+    }
   }
 
   /**
@@ -146,34 +81,30 @@ export class ResourceController<T extends Document> implements ICrudController {
    * @param {string[]} [blacklist=[]] List of properties to ignore
    * @returns
    */
-  public update(id?: string, blacklist: string[] = []) {
-    return async (req: Request, res: Response, next?: NextFunction): Promise<Response | undefined> => {
-      try {
-        const modelId: any = id || req.params.id;
+  public async update(id: string, blacklist: string[] = [], req: Request, res: Response, next?: NextFunction): Promise<any | undefined> {
+    try {
+      const modelId: any = id || req.params.id;
 
-        // delete blacklisted properties from body
-        const defaultBlacklist = ['_id', 'createdAt', 'updatedAt', ...blacklist];
-        for (const key of defaultBlacklist) {
-          delete req.body[key];
-        }
-
-        const resource = await this.modelSchema
-          .findOneAndUpdate(
-            { _id: modelId },
-            req.body,
-            { new: true, runValidators: true, context: 'query' }
-          )
-          .orFail(new NotFound())
-          .exec();
-
-        return res
-          .status(StatusCodes.OK)
-          .json(resource);
-
-      } catch (e) {
-        next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
+      // delete blacklisted properties from body
+      const defaultBlacklist = ['_id', 'createdAt', 'updatedAt', ...blacklist];
+      for (const key of defaultBlacklist) {
+        delete req.body[key];
       }
-    };
+
+      const resource = await this.modelSchema
+        .findOneAndUpdate(
+          { _id: modelId },
+          req.body,
+          { new: true, runValidators: true, context: 'query' }
+        )
+        .orFail(new NotFound())
+        .exec();
+
+      return resource;
+
+    } catch (e) {
+      next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
+    }
   }
 
   /**
@@ -181,23 +112,21 @@ export class ResourceController<T extends Document> implements ICrudController {
    *
    * @param {string} [id] Model id to be deleted
    */
-  public delete(id?: string) {
-    return async (req: Request, res: Response, next?: NextFunction): Promise<Response | undefined> => {
-      try {
-        const modelId: any = id || req.params.id;
+  public async delete(id: string, req: Request, res: Response, next?: NextFunction): Promise<any | undefined> {
+    try {
+      const modelId: any = id || req.params.id;
 
-        await this.modelSchema
-          .findOneAndDelete({ _id: modelId })
-          .orFail(new NotFound())
-          .exec();
+      await this.modelSchema
+        .findOneAndDelete({ _id: modelId })
+        .orFail(new NotFound())
+        .exec();
 
-        return res
-          .sendStatus(StatusCodes.NO_CONTENT);
+      return res
+        .sendStatus(StatusCodes.NO_CONTENT);
 
-      } catch (e) {
-        next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
-      }
-    };
+    } catch (e) {
+      next ? next(e) : res.status(StatusCodes.BAD_REQUEST).json(e);
+    }
   }
 
   // #endregion CRUD methods

@@ -4,6 +4,7 @@ import { Request, Response, NextFunction, Router } from 'express';
 import { ITask, TaskModel } from './task.model';
 import { TasksService } from './tasks.service';
 import { ResourceController } from '../../shared';
+import { StatusCodes } from 'http-status-codes';
 
 export class TaskController {
     private tasksService: TasksService = new TasksService();
@@ -34,7 +35,11 @@ export class TaskController {
     public async getTasks(req: Request, res: Response) {
         const tasksService = new TasksService();
         console.info('getTasks request');
-        const allTasks = tasksService.getAll()(req, res);
+        const allTasks = await tasksService.getAll(req, res);
+        // you can process the data retrieved here before returning it to the client
+        return res
+            .status(StatusCodes.OK)
+            .json(allTasks);
     }
 
     /**
@@ -42,10 +47,14 @@ export class TaskController {
      * @param req
      * @param res
      */
-    public postTask(req: Request, res: Response) {
+    public async postTask(req: Request, res: Response) {
         const tasksService = new TasksService();
         console.info('create request');
-        const task = tasksService.create()(req, res);
+        const task = await tasksService.create(req, res);
+        // you can process the data retrieved here before returning it to the client
+        return res
+            .status(StatusCodes.CREATED)
+            .json(task);
     }
 
     /**
@@ -53,10 +62,13 @@ export class TaskController {
      * @param req 
      * @param res 
      */
-    public deleteTask(req: Request, res: Response) {
+    public async deleteTask(req: Request, res: Response) {
         const tasksService = new TasksService();
         console.info('deleteTask request');
-        const task = tasksService.delete(req.params.id)(req, res);
+        const task = await tasksService.delete(req.params.id, req, res);
+        return res
+            .status(StatusCodes.OK)
+            .json(task);
     }
 
 
@@ -65,10 +77,13 @@ export class TaskController {
      * @param req 
      * @param res 
      */
-    public updateTask(req: Request, res: Response) {
+    public async updateTask(req: Request, res: Response) {
         const tasksService = new TasksService();
         console.info('updateTask request');
-        const task = tasksService.update(req.params.id, req.body.blacklist)(req, res);
+        const task = await tasksService.update(req.params.id, req.body.blacklist, req, res);
+        return res
+            .status(StatusCodes.OK)
+            .json(task);
     }
 
     /**
@@ -76,9 +91,12 @@ export class TaskController {
      * @param req 
      * @param res 
      */
-    public getTaskById(req: Request, res: Response) {
+    public async getTaskById(req: Request, res: Response) {
         const tasksService = new TasksService();
         console.info('getTaskById request');
-        const task = tasksService.getOne(req.params.id)(req, res);
+        const task = await tasksService.getOne(req.params.id, req, res);
+        return res
+            .status(StatusCodes.OK)
+            .json(task);
     }
 }
