@@ -13,6 +13,15 @@
   font-size: small;
 }
 
+.pointer-cursor{
+  cursor: pointer;
+}
+
+.delete-task {
+  color: red;
+  background-color: white;
+  height: 13px;
+}
 ::-webkit-scrollbar {
   width: 15px;
 }

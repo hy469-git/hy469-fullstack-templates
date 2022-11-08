@@ -31,13 +31,12 @@ export class TasksViewComponent implements OnInit {
 
   public postTask(): void {
     // Emit event for update tasks
-    this.socketService.publish("tasks_update", {});
-
     const task = new TaskModel({ title: this.title, description: this.description });
     this.tasksService.create(task).subscribe((result) => {
       this.tasks.push(result);
       this.title = '';
       this.description = '';
+      this.socketService.publish("tasks_update", {});
     });
   }
 
