@@ -25,3 +25,6 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Notes:
+* **Important:** [Bootstrap v3](https://getbootstrap.com/docs/3.3/) is included in `frontend/src/index.html`. You may either upgrade it or delete it if you don't use it. Keep in mind that in case you use a class name that bootstrap also implements, you may encounter unexpected behavior. 
