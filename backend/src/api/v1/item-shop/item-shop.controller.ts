@@ -2,9 +2,11 @@ import { Request, Response, NextFunction, Router } from 'express';
 import { IItem, ItemModel } from './item.model';
 import { ResourceController } from '../../shared';
 import { StatusCodes } from 'http-status-codes';
+import { Logger } from '../../shared/utils/logger';
 
 export class ItemShopController extends ResourceController<IItem>{
 
+    private logger: Logger = new Logger();
     constructor() {
         super(ItemModel);
     }
@@ -32,9 +34,8 @@ export class ItemShopController extends ResourceController<IItem>{
      * @param res 
      */
     getItems = async (req: Request, res: Response) => {
-        console.info('getItems request');
+        this.logger.debug('getItems request');
         const allTasks = await this.getAll(req, res);
-        // you can process the data retrieved here before returning it to the client
         return res
             .status(StatusCodes.OK)
             .json(allTasks);
@@ -47,9 +48,8 @@ export class ItemShopController extends ResourceController<IItem>{
      */
 
     postItem = async (req: Request, res: Response) => {
-        console.info('postItem request');
+        this.logger.debug('postItem request');
         const task = await this.create(req, res);
-        // you can process the data retrieved here before returning it to the client
         return res
             .status(StatusCodes.OK)
             .json(task);
@@ -61,9 +61,8 @@ export class ItemShopController extends ResourceController<IItem>{
      * @param res 
      */
     deleteItem = async (req: Request, res: Response) => {
-        console.info('deleteItem request');
+        this.logger.debug('deleteItem request');
         const task = await this.delete(req.params.id, req, res);
-        // you can process the data retrieved here before returning it to the client
         return res
             .status(StatusCodes.OK)
             .json(task);
@@ -76,9 +75,8 @@ export class ItemShopController extends ResourceController<IItem>{
      * @param res 
      */
     updateItem = async (req: Request, res: Response) => {
-        console.info('updateItem request');
+        this.logger.debug('updateItem request');
         const task = await this.update(req.params.id, req.body.blacklist, req, res);
-        // you can process the data retrieved here before returning it to the client
         return res
             .status(StatusCodes.OK)
             .json(task);
@@ -90,22 +88,20 @@ export class ItemShopController extends ResourceController<IItem>{
      * @param res 
      */
     getItemById = async (req: Request, res: Response) => {
-        console.info('getItemById request');
+        this.logger.debug('getItemById request');
         const item = await this.getOne(req.params.id, req, res);
-
-        // you can process the data retrieved here before returning it to the client
         return res
             .status(StatusCodes.OK)
             .json(item);
     }
 
     /**
-     * Get single task by id
+     * Initialize items
      * @param req 
      * @param res 
      */
     initializeItems = async (req: Request, res: Response) => {
-        console.info('initialize items request');
+        this.logger.debug('initialize items request');
         let items: any[] = [
             {
                 name: "Milk",
@@ -138,16 +134,11 @@ export class ItemShopController extends ResourceController<IItem>{
 
         await ItemModel.insertMany(items)
             .then(function (docs) {
-                console.log("Nice ", docs);
                 res.json(docs);
-                // response.json(docs);
             })
             .catch(function (err) {
                 res.status(500);
-                // response.status(500).send(err);
             });
-
-        // you can process the data retrieved here before returning it to the client
         return res
             .status(StatusCodes.OK);
     }

@@ -1,11 +1,11 @@
 import http, { Server } from 'http';
 import io from 'socket.io';
-// import RedisAdapter from 'socket.io-redis';
+import { Logger } from '../../../api/shared/utils/logger';
 import { config, getHostDomain } from '../../../config/environment';
 
 
 export class SocketServer {
-
+  private logger: Logger = new Logger();
   public io!: io.Server;
 
   constructor() {
@@ -24,10 +24,10 @@ export class SocketServer {
       // register events on connect
       this.onConnect();
 
-      console.info(`Sockets are established on path: ${getHostDomain()}`);
+      this.logger.success(`Sockets are established on path: ${getHostDomain()}`);
 
     } catch (e) {
-      console.error('Socket server failed to start', e);
+      this.logger.error('Socket server failed to start', e);
     }
   }
 
@@ -38,8 +38,8 @@ export class SocketServer {
    */
   private onConnect() {
     this.io.on('connection', socket => {
-      console.debug('connection');
-      console.log("New client has connected");
+      this.logger.debug('Connection event triggered');
+      this.logger.debug("New client has connected");
       //emit welcome message from server to user
       // handshake verify function
       socket.emit("welcome", {
@@ -59,7 +59,7 @@ export class SocketServer {
    */
   private onSubscribe(socket: io.Socket): void {
     socket.on('subscribe', (data: any) => {
-      console.debug('subscribe');
+      this.logger.debug('subscribe');
     });
   }
 
@@ -70,7 +70,7 @@ export class SocketServer {
    */
   private onUnsubscribe(socket: io.Socket): void {
     socket.on('unsubscribe', (data: any) => {
-      console.debug('unsubscribe');
+      this.logger.debug('unsubscribe');
     });
   }
 
@@ -81,7 +81,7 @@ export class SocketServer {
    */
   private onDisconnecting(socket: io.Socket): void {
     socket.on('disconnecting', (reason: any) => {
-      console.debug('disconnecting');
+      this.logger.debug('disconnecting');
     });
   }
 
@@ -92,7 +92,7 @@ export class SocketServer {
    */
   private onClientEvent(socket: io.Socket): void {
     socket.on('client:event', (data: any) => {
-      console.debug('client event');
+      this.logger.debug('client event');
       this.io.emit(data.event, data.data);
     });
   }

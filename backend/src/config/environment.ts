@@ -2,7 +2,7 @@
 export const config = {
 
   // application environment mode
-  environment: process.env.ENVIRONMENT || "dev",
+  environment: process.env.ENVIRONMENT || "production",
 
   // host domain options
   protocol: process.env.PROTOCOL || 'http',

@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction, Router } from 'express';
+import { Logger } from '../../shared/utils/logger';
 
 export class ExampleController {
-
+    private logger: Logger = new Logger();
     /**
      * Apply all routes for example
      *
@@ -19,7 +20,7 @@ export class ExampleController {
      * Sens a example message back as a response
      */
     public getExample(req: Request, res: Response) {
-        console.info('getExample request');
+        this.logger.debug('getExample request');
         res.json({ message: 'hello there!' });
     }
 }

@@ -14,6 +14,7 @@ export class ItemsService {
 
   constructor(private http: HttpClient) {
     this.hostURl = environment.host;
+    // remove comment to delete all items
     // this.deleteAll();
   }
 
@@ -35,7 +36,6 @@ export class ItemsService {
   // Debug function for deleting all items
   private deleteAll() {
     this.getAll().subscribe((data: ItemModel[]) => {
-      console.log(data);
       data.forEach((item: ItemModel) => {
         this.delete((item as any)._id).subscribe((data: any) => { });
       });

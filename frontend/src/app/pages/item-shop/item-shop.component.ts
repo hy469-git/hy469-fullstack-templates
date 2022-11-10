@@ -25,7 +25,6 @@ export class ItemShopComponent implements OnInit {
 
   async ngOnInit() {
     this.itemsService.getAll().subscribe((result) => {
-      console.log(result);
       this.items = result;
       if (this.items.length > 0)
         this.selectedItem = this.items[0];
@@ -35,7 +34,6 @@ export class ItemShopComponent implements OnInit {
 
   public onItemClick(item: ItemModel) {
     this.items.forEach(item => { item.selected = false });
-
     this.selectedItem = item;
     item.selected = true;
   }

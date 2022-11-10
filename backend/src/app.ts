@@ -1,19 +1,17 @@
 import http from 'http';
 import cors from 'cors';
-// import morgan from 'morgan';
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-// import methodOverride from 'method-override';
 import { MethodNotAllowed } from 'http-errors';
 import { StatusCodes } from 'http-status-codes';
 import { Api } from './api';
-// import { logger } from './utils/logger';
 import { MongoAdapter } from './database';
 import { config, getHostDomain } from './config/environment';
 import { DIContainer, SocketsService } from './services';
+import { Logger } from './api/shared/utils/logger';
 export class App {
-
+    private logger: Logger = new Logger();
     private app!: express.Application;
 
     constructor() { }
@@ -36,11 +34,11 @@ export class App {
 
             // Finally start server
             server.listen(config.port, () => {
-                console.info(`Server started in "${config.environment}" mode. Available on: ${getHostDomain()}`);
+                this.logger.success(`Server started in "${config.environment}" mode. Available on: ${getHostDomain()}`);
             });
 
         } catch (e) {
-            console.error(`Failed to start server due to error: `, e);
+            this.logger.error(`Failed to start server due to error: `, e);
             process.exit(-1);
         }
     }
@@ -87,12 +85,12 @@ export class App {
         try {
             // connect to database
             await MongoAdapter.connect();
-            console.info(`MongoDB is connected on ${config.mongo.uri}`);
+            this.logger.success(`MongoDB is connected on ${config.mongo.uri}`);
             const Str = mongoose.Schema.Types.String as any;
             Str.checkRequired((v: string) => v != null);
 
         } catch (e) {
-            console.error(`MongoDB connection error: `, e);
+            this.logger.error(`MongoDB connection error: `, e);
             throw e;
         }
     }
