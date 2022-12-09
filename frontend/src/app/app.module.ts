@@ -8,7 +8,7 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { environment } from 'src/environments/environment';
 import { ItemShopComponent } from './pages/item-shop/item-shop.component';
 import { ItemPreviewComponent } from './pages/item-shop/item-preview/item-preview.component';
-import { SmartSpeakerService } from './smart-speaker.service'
+import { SmartSpeakerService } from 'src/app/global/services/smart-speaker/smart-speaker.service';
 
 const socketIoConfig: SocketIoConfig = { url: environment.host, options: {} };
 @NgModule({

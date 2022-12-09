@@ -47,12 +47,16 @@ export class SmartSpeakerService {
         this.recognition.stop();
     }
 
-    public addCommand(command: string, callback: Function) {
-        this.commands[command.toLowerCase()] = callback;
-        console.log(this.commands);
+    public addCommand(text: string | string[], callback: Function) {
+        if(typeof text === "string")
+            this.commands[text.toLowerCase()] = callback;
+        else
+            text.forEach(command => {
+                this.commands[command.toLowerCase()] = callback;
+            })
     }
 
-    public speak(text: string) {
+    public speak(text: string, callback?:Function) {
         let utterance = new SpeechSynthesisUtterance();
         utterance.text = text;
         utterance.voice = speechSynthesis.getVoices()[0];
@@ -61,6 +65,8 @@ export class SmartSpeakerService {
             console.log(event);
         }
         speechSynthesis.speak(utterance);
+        if(callback)
+            callback();
     }
 
     private createGrammar() {
