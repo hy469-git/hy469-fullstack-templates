@@ -1,7 +1,7 @@
 # -------------- STAGE 1: Build --------------
 
 FROM node:18.12.0-alpine3.16
-LABEL maintainer="Konstantinos Volakakis"
+LABEL maintainer="HY-469 TAs"
 
 # set working directory
 WORKDIR /frontend
@@ -9,13 +9,15 @@ WORKDIR /frontend
 ENV PATH /frontend/node_modules/.bin:$PATH
 
 # install and cache app dependencies
+RUN npm install -g @angular/cli@16.0.3 @angular/core@16.0.3
 COPY package.json /frontend/package.json
-RUN npm install
-RUN npm install -g @angular/cli@14.2.8
+
+RUN npm install --legacy-peer-deps
+
 
 # add app
 COPY . /frontend
 
 # -------------- STAGE 2: Run --------------
 
-CMD ng serve --host 0.0.0.0 --poll 1000
+CMD ng serve --host 0.0.0.0
