@@ -1,0 +1,19 @@
+<button class="virtual-btn" id="btn1" #btn1> virtually click me </button>
+<button class="virtual-btn" id="btn2" #btn2> virtually click me </button>
+<button class="virtual-btn" id="btn3" #btn3> virtually click me </button>
+<button class="virtual-btn" id="btn4" #btn4> virtually click me </button>
+<div class="gesture-display">
+  <b> Recognized gesture:</b> {{ leap.gestureRecognized }}
+</div>
+<div>
+  <b>Click events ({{ clickEvents.length }})</b>
+  <div *ngFor="let clickEvent of clickEvents">
+    {{ clickEvent }}
+  </div>
+</div>
+<div id="cursor" #vcur [ngStyle]="cursorStyle" class="cursor-outer">
+  <div [ngStyle]="cursorSize" class="vcursor"></div>
+  <div [ngStyle]="loading" class="loading">
+    <div [ngStyle]="cursorSize" class="black"></div>
+  </div>
+</div>
